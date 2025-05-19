@@ -1,0 +1,7 @@
+# 가상환경 무시
+venv/
+.env/
+__pycache__/
+
+# 크롤링 결과 json 파일 무시
+nhis_all_list.json
