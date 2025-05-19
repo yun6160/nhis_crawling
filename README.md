@@ -1,6 +1,6 @@
 # NHIS 데이터 수집 스크립트
 
-이 스크립트는 Selenium과 WebDriver Manager를 사용하여 국민건강보험공단(NHIS) 사이트에서 데이터를 크롤링합니다.
+Selenium과 WebDriver Manager를 사용하여 국민건강보험공단(NHIS) 사이트에서 데이터를 크롤링합니다.
 
 ---
 

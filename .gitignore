@@ -5,3 +5,4 @@ __pycache__/
 
 # 크롤링 결과 json 파일 무시
 nhis_all_list.json
+nhis_all_list_*.json
