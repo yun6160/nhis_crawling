@@ -1,3 +1,4 @@
 # 필수 패키지
 selenium
 webdriver-manager
+beautifulsoup4
