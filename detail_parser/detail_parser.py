@@ -1,15 +1,14 @@
 from bs4 import BeautifulSoup
-from parse_basic_info import parse_basic_info
-from parse_checkup_items import parse_checkup_items
-from parse_degree_management import parse_degree_management
-from parse_evaluation_info import parse_evaluation_info
-from parse_holiday_checkup import parse_holiday_checkup
-from parse_major_equipment_section import parse_major_equipment_section 
-from parse_disability_benefit_section import parse_disability_benefit_section
-
-from parse_medical_lunch_reception_times import parse_medical_lunch_reception_times
-from parse_parking_info import parse_parking_info
-from parse_reservation_status import parse_reservation_status
+from .parse_basic_info import parse_basic_info
+from .parse_checkup_items import parse_checkup_items
+from .parse_degree_management import parse_degree_management
+from .parse_evaluation_info import parse_evaluation_info
+from .parse_major_equipment_section import parse_major_equipment_section 
+from .parse_medical_lunch_reception_times import parse_medical_lunch_reception_times
+# from .parse_holiday_checkup import parse_holiday_checkup
+# from .parse_disability_benefit_section import parse_disability_benefit_section
+# from .parse_parking_info import parse_parking_info
+# from .parse_reservation_status import parse_reservation_status
 
 def parse_detail_html(html_text):
     soup = BeautifulSoup(html_text, 'html.parser')

@@ -1,4 +1,4 @@
-from utils import clean_text
+from utils.utils import clean_text
 
 
 def parse_holiday_checkup(soup):

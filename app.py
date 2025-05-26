@@ -4,7 +4,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 import json
 import math
 import time
-import detail_parser
+from detail_parser.detail_parser import parse_detail_html
 
 # 1️⃣ 드라이버 세팅
 options = webdriver.ChromeOptions()
@@ -146,7 +146,7 @@ for p in range(1, pages + 1):
                 detail_data= json.loads(detail_raw)
             except json.JSONDecodeError:
                 # JSON 파싱 실패 시 detail_parser 모듈로 HTML 파싱
-                detail_data = detail_parser.parse_detail_html(detail_raw)
+                detail_data = parse_detail_html(detail_raw)
             
             item['detail'] = detail_data
             time.sleep(0.3)
