@@ -105,12 +105,12 @@ def clean_duplicate_keys(item):
 
     cleaned = {
         'hpkiho': lower_keys_item.get('hpkiho') or lower_keys_item.get('hp_kiho'),
-        'hpname': lower_keys_item.get('hpname') or lower_keys_item.get('hp_name'),
-        'hptelno': lower_keys_item.get('hptelno') or lower_keys_item.get('hp_telno'),
-        'hpaddr': lower_keys_item.get('hpaddr') or lower_keys_item.get('hp_addr'),
-        'type_day': lower_keys_item.get('type_day') or lower_keys_item.get('type_day'.upper()),
-        'type_hspt': lower_keys_item.get('type_hspt') or lower_keys_item.get('type_hspt'.upper()),
-        'type_list': lower_keys_item.get('type_list') or lower_keys_item.get('type_list'.upper())
+        '검진기관명': lower_keys_item.get('hpname') or lower_keys_item.get('hp_name'),
+        '검진기관_전화번호': lower_keys_item.get('hptelno') or lower_keys_item.get('hp_telno'),
+        '검진기관_주소': lower_keys_item.get('hpaddr') or lower_keys_item.get('hp_addr'),
+        '검진기관_영업일': lower_keys_item.get('type_day') or lower_keys_item.get('type_day'.upper()),
+        '검진기관_우수항목': lower_keys_item.get('type_hspt') or lower_keys_item.get('type_hspt'.upper()),
+        '검진기관_항목': lower_keys_item.get('type_list') or lower_keys_item.get('type_list'.upper())
     }
     return {k: v for k, v in cleaned.items() if v is not None}
 
@@ -121,6 +121,9 @@ total = int(first_data['totalCount'])
 # 5️⃣ 실제 페이지 크기 계산
 actual_page_size = len(first_data['list'])  # 보통 10
 pages = math.ceil(total / actual_page_size)
+
+# 시작 시간 기록
+start_time = time.time()
 
 # 6️⃣ 모든 페이지 순회하며 데이터 수집 + 상세 데이터 바로 크롤링
 all_items = []
@@ -136,7 +139,7 @@ for p in range(1, pages + 1):
     for idx, item in enumerate(cleaned_page_items, start=1):
         ykiho = item.get('hpkiho')
         if ykiho:
-            print(f"  상세 데이터 크롤링 중... (페이지 {p} 아이템 {idx}/{len(cleaned_page_items)}) ykiho={ykiho}")
+            # print(f"  상세 데이터 크롤링 중... (페이지 {p} 아이템 {idx}/{len(cleaned_page_items)}) ykiho={ykiho}")
             detail_raw = driver.execute_script(fetch_detail_script(ykiho))
             
             try:
@@ -147,17 +150,20 @@ for p in range(1, pages + 1):
             
             item['detail'] = detail_data
             time.sleep(0.3)
-            # 테스트용 나중에 지우기
-            if idx==3:
-                print("3개 처리 완료, 크롤링 종료합니다.")
-                break  # 상세 데이터 크롤링 루프 탈출
         else:
             print(f"  ykiho 없음, 상세 데이터 생략 (페이지 {p} 아이템 {idx})")
     # 테스트용 나중에 지우기
-    if p==2:
+    if p==6:
         break
 
     all_items.extend(cleaned_page_items)
+
+    # ETA 계산
+    elapsed = time.time() - start_time
+    avg_time_per_page = elapsed / p
+    remaining_pages = pages - p
+    eta_minutes = (avg_time_per_page * remaining_pages) / 60
+    print(f"  경과 시간: {elapsed/60:.2f}분, 예상 남은 시간: {eta_minutes:.2f}분")
 
 # 9️⃣ 결과 저장
 with open('nhis_all_list_with_detail.json', 'w', encoding='utf-8') as f:

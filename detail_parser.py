@@ -28,22 +28,22 @@ def parse_detail_html(html_text):
     # --- 검진기관 평가정보 추출 시작 ---
     basic_info['검진기관 평가정보'] = parse_evaluation_info(soup)
 
-    # --- 예약현황 섹션 파싱 ---
-    basic_info.update(parse_reservation_status(soup))
+    # --- 예약현황 섹션 파싱 2025.05.26 필요없음 ---
+    # basic_info.update(parse_reservation_status(soup))
 
-    # --- 길찾기·주차 섹션 파싱 ---
-    basic_info.update(parse_parking_info(soup))
+    # --- 길찾기·주차 섹션 파싱 2025.05.26 필요없음 ---
+    # basic_info.update(parse_parking_info(soup))
 
-    # --- 진료·점심·접수시간 섹션 파싱 ---
+    # --- 진료·점심·접수시간 섹션 파싱 2025.05.26 점심시간만 필요 ---
     basic_info.update(parse_medical_lunch_reception_times(soup))
 
-    # --- 공휴일검진 섹션 파싱 ---
-    basic_info.update(parse_holiday_checkup(soup))
+    # --- 공휴일검진 섹션 파싱 2025.05.26 필요없음 ---
+    # basic_info.update(parse_holiday_checkup(soup))
 
     # --- 주요장비 보유현황 섹션 파싱 ---
     basic_info['주요장비 보유현황'] = parse_major_equipment_section(soup)
 
-    # 장애친화 편익정보 섹션 파싱 추가
-    basic_info['장애친화 편익정보'] = parse_disability_benefit_section(soup)
+    # 장애친화 편익정보 섹션 파싱 추가 2025.05.26 필요없음
+    # basic_info['장애친화 편익정보'] = parse_disability_benefit_section(soup)
 
     return basic_info
