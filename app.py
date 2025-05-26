@@ -46,7 +46,7 @@ def fetch_page_script(page_num, page_size):
     """
 
 # 안전하게 상세 데이터 요청 함수 (응답을 텍스트로 받아서 JSON 파싱 시도)
-def fetch_detail_script(ykiho):
+def fetch_detail_script(ykiho, vlt_year):
     payload = (
         f"isMobile=N"
         f"&pageNum=1"
@@ -76,7 +76,7 @@ def fetch_detail_script(ykiho):
         f"&searchPharmacyDayType="
         f"&searchHpType="
         f"&isParam=N"
-        f"&search_year=2022"
+        f"&search_year={vlt_year}"
         f"&search_sido=11"
         f"&search_sigungu="
         f"&search_emd_gubun=emd"
@@ -110,7 +110,8 @@ def clean_duplicate_keys(item):
         '검진기관_주소': lower_keys_item.get('hpaddr') or lower_keys_item.get('hp_addr'),
         '검진기관_영업일': lower_keys_item.get('type_day') or lower_keys_item.get('type_day'.upper()),
         '검진기관_우수항목': lower_keys_item.get('type_hspt') or lower_keys_item.get('type_hspt'.upper()),
-        '검진기관_항목': lower_keys_item.get('type_list') or lower_keys_item.get('type_list'.upper())
+        '검진기관_항목': lower_keys_item.get('type_list') or lower_keys_item.get('type_list'.upper()),
+        'vlt_yyyy' : lower_keys_item.get('vlt_yyyy') or lower_keys_item.get('vlt_yyyy'.upper())
     }
     return {k: v for k, v in cleaned.items() if v is not None}
 
@@ -138,9 +139,12 @@ for p in range(1, pages + 1):
     # 상세 데이터 추가 크롤링
     for idx, item in enumerate(cleaned_page_items, start=1):
         ykiho = item.get('hpkiho')
+        vlt_year = item.get('vlt_yyyy')
+        name = item.get('검진기관명')
+        # print({name},vlt_year)
         if ykiho:
             # print(f"  상세 데이터 크롤링 중... (페이지 {p} 아이템 {idx}/{len(cleaned_page_items)}) ykiho={ykiho}")
-            detail_raw = driver.execute_script(fetch_detail_script(ykiho))
+            detail_raw = driver.execute_script(fetch_detail_script(ykiho, vlt_year))
             
             try:
                 detail_data= json.loads(detail_raw)
@@ -153,8 +157,8 @@ for p in range(1, pages + 1):
         else:
             print(f"  ykiho 없음, 상세 데이터 생략 (페이지 {p} 아이템 {idx})")
     # 테스트용 나중에 지우기
-    if p==6:
-        break
+    # if p==5:
+    #     break
 
     all_items.extend(cleaned_page_items)
 

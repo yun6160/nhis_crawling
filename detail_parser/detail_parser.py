@@ -5,9 +5,9 @@ from .parse_degree_management import parse_degree_management
 from .parse_evaluation_info import parse_evaluation_info
 from .parse_major_equipment_section import parse_major_equipment_section 
 from .parse_medical_lunch_reception_times import parse_medical_lunch_reception_times
+from .parse_parking_info import parse_parking_info
 # from .parse_holiday_checkup import parse_holiday_checkup
 # from .parse_disability_benefit_section import parse_disability_benefit_section
-# from .parse_parking_info import parse_parking_info
 # from .parse_reservation_status import parse_reservation_status
 
 def parse_detail_html(html_text):
@@ -30,8 +30,8 @@ def parse_detail_html(html_text):
     # --- 예약현황 섹션 파싱 2025.05.26 필요없음 ---
     # basic_info.update(parse_reservation_status(soup))
 
-    # --- 길찾기·주차 섹션 파싱 2025.05.26 필요없음 ---
-    # basic_info.update(parse_parking_info(soup))
+    # --- 길찾기·주차 섹션 파싱 ---
+    basic_info.update(parse_parking_info(soup))
 
     # --- 진료·점심·접수시간 섹션 파싱 2025.05.26 점심시간만 필요 ---
     basic_info.update(parse_medical_lunch_reception_times(soup))
