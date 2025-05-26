@@ -153,7 +153,7 @@ for p in range(1, pages + 1):
                 break  # 상세 데이터 크롤링 루프 탈출
         else:
             print(f"  ykiho 없음, 상세 데이터 생략 (페이지 {p} 아이템 {idx})")
-    # 테스트용 나중에 지우기기
+    # 테스트용 나중에 지우기
     if p==2:
         break
 
