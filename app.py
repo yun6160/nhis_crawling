@@ -20,21 +20,146 @@ driver = webdriver.Chrome(
 # 2️⃣ 초기 페이지 진입 (세션 확보용)
 driver.get("https://www.nhis.or.kr/nhis/healthin/retrieveExmdAdminSearch.do")
 
+# 사용자에게 선택지
+while True:
+    print("조회할 지역을 선택하세요:")
+    print("1. 서울특별시")
+    print("2. 경기도")
+    choice = input("번호 입력 (1 또는 2): ").strip()
+    if choice == '1':
+        sido = '서울특별시'
+        sidoCode = '11'
+        break
+    elif choice == '2':
+        sido = '경기도'
+        sidoCode = '41'
+        break
+    else:
+        print("1 또는 2만 입력해 주세요.")
+
+while True:
+    print("검진 유형을 선택하세요:")
+    print("1. 일반")    # searchExamOrgType1
+    print("2. 구강")    # searchExamOrgType3
+    print("3. 영유아")  # searchExamOrgType4
+    print("4. 학생")    # searchExamOrgType_STDNT
+    print("5. 암검진 전체")
+    print("6. 세부 암 검진(선택지를 보여드립니다)")
+    choice = input("번호 입력 (1 ~ 6): ").strip()
+
+    if choice == '1':
+        type = '1'
+        type_nm = '일반'
+        break
+    elif choice == '2':
+        type = '3'
+        type_nm = '구강'
+        break
+    elif choice == '3':
+        type = '4'
+        type_nm = '영유아'
+        break
+    elif choice == '4':
+        type = '_STDNT'
+        type_nm = '학생'
+        break
+    elif choice == '5':
+        type = 'cancer_all'
+        type_nm = '암검진 전체'
+        break
+    elif choice == '6':
+        while True:
+            print("1. 위암")    # searchExamOrgType9_1
+            print("2. 대장암")  # searchExamOrgType9_2
+            print("3. 자궁경부암")# searchExamOrgType9_3
+            print("4. 유방암")  # searchExamOrgType9_4
+            print("5. 간암")    # searchExamOrgType9_5
+            print("6. 폐암")    # searchExamOrgType9_6
+            choice = input("번호 입력 (1 ~ 6): ").strip()
+            if choice == '1':
+                type = '9_1'
+                type_nm = '위암'
+                break
+            elif choice == '2':
+                type = '9_2'
+                type_nm = '대장암'
+                break
+            elif choice == '3':
+                type = '9_3'
+                type_nm = '자궁경부암'
+                break
+            elif choice == '4':
+                type = '9_4'
+                type_nm = '유방암'
+                break
+            elif choice == '5':
+                type = '9_5'
+                type_nm = '간암'
+                break
+            elif choice == '6':
+                type = '9_6'
+                type_nm = '폐암'
+                break
+            else:
+                print("1~6 사이 숫자를 입력해주세요.")
+        break
+    else:
+        print("유효한 숫자만 입력해주세요.")
+
+print(f"선택한 지역과 검진: {sido}, {type_nm} (파라미터: {type})")
+
+
 # 3️⃣ fetch용 스크립트 생성 함수 (기본 리스트)
-def fetch_page_script(page_num, page_size):
-    payload = (
+def fetch_page_script(page_num, page_size, search_sido_nm=sido, search_sido_cd=sidoCode, type=type ):
+    base_payload = (
         f"isMobile=N"
         f"&pageNum={page_num}"
         f"&pageFirst={'Y' if page_num == 1 else 'N'}"
         f"&pageSize={page_size}"
-        f"&viewType=&ykiho=&cur_sido_nm=&cur_sigungu_nm=&cur_emd_nm="
-        f"&cur_sido=&cur_sigungu=&cur_emd="
-        f"&search_sido_nm=서울특별시&search_sigungu_nm=&search_emd_nm=&search_road_nm="
-        f"&latitude=37.3246580766&longitude=127.9863282634&lat=&lng=&radius=1000&gpsYn=N&yoyangforPat="
-        f"&searchType=examOrg&searchSpcClinicType=01&searchPharmacyDayType=&searchHpType="
-        f"&isParam=N&search_year=&search_sido=11&search_sigungu=&search_emd_gubun=emd"
-        f"&search_emd=&search_road=&search_name=&searchExamOrgType1=Y"
+        f"&viewType="
+        f"&ykiho="
+        f"&cur_sido_nm="
+        f"&cur_sigungu_nm="
+        f"&cur_emd_nm="
+        f"&cur_sido="
+        f"&cur_sigungu="
+        f"&cur_emd="
+        f"&search_sido_nm={search_sido_nm}"
+        f"&search_sigungu_nm="
+        f"&search_emd_nm="
+        f"&search_road_nm="
+        f"&latitude=37.3246580766&longitude=127.9863282634&lat=&lng=&radius=1000&gpsYn=N"
+        f"&yoyangforPat="
+        f"&searchType=examOrg"
+        f"&searchSpcClinicType=01"
+        f"&searchPharmacyDayType="
+        f"&searchHpType="
+        f"&isParam=N"
+        f"&search_year="
+        f"&search_sido={search_sido_cd}"
+        f"&search_sigungu="
+        f"&search_emd_gubun=emd"
+        f"&search_emd="
+        f"&search_road="
+        f"&search_name="
     )
+
+    if type == "cancer_all":
+            # 암검진 전체 파라미터 추가
+        cancer_params = (
+            "&chk_examOrgType9_all=Y"
+            "&searchExamOrgType9_1=Y"
+            "&searchExamOrgType9_2=Y"
+            "&searchExamOrgType9_3=Y"
+            "&searchExamOrgType9_4=Y"
+            "&searchExamOrgType9_5=Y"
+            "&searchExamOrgType9_6=Y"
+        )
+        payload = base_payload + cancer_params
+    else:
+        # 기본 검사 유형 파라미터
+        payload = base_payload + f"&searchExamOrgType{type}=Y"
+
     return f"""
     return fetch('https://www.nhis.or.kr/nhis/healthin/retrieveMdcAdminInq.do', {{
       method: 'POST',
@@ -47,7 +172,7 @@ def fetch_page_script(page_num, page_size):
     """
 
 # 안전하게 상세 데이터 요청 함수 (응답을 텍스트로 받아서 JSON 파싱 시도)
-def fetch_detail_script(ykiho, vlt_year):
+def fetch_detail_script(ykiho, vlt_year, search_sido_nm=sido, search_sido_cd=sidoCode, type=type):
     payload = (
         f"isMobile=N"
         f"&pageNum=1"
@@ -61,7 +186,7 @@ def fetch_detail_script(ykiho, vlt_year):
         f"&cur_sido="
         f"&cur_sigungu="
         f"&cur_emd="
-        f"&search_sido_nm=서울특별시"
+        f"&search_sido_nm={search_sido_nm}"
         f"&search_sigungu_nm="
         f"&search_emd_nm="
         f"&search_road_nm="
@@ -78,14 +203,27 @@ def fetch_detail_script(ykiho, vlt_year):
         f"&searchHpType="
         f"&isParam=N"
         f"&search_year={vlt_year}"
-        f"&search_sido=11"
+        f"&search_sido={search_sido_cd}"
         f"&search_sigungu="
         f"&search_emd_gubun=emd"
         f"&search_emd="
         f"&search_road="
         f"&search_name="
-        f"&searchExamOrgType1=Y"
     )
+    if type == 'cancer_all':
+        cancer_params = (
+            "&chk_examOrgType9_all=Y"
+            "&searchExamOrgType9_1=Y"
+            "&searchExamOrgType9_2=Y"
+            "&searchExamOrgType9_3=Y"
+            "&searchExamOrgType9_4=Y"
+            "&searchExamOrgType9_5=Y"
+            "&searchExamOrgType9_6=Y"
+        )
+        payload += cancer_params
+    else:
+        payload += f"&searchExamOrgType{type}=Y"
+
     return f"""
     return fetch('https://www.nhis.or.kr/nhis/healthin/retrieveMdcAdminDtlInq.do', {{
       method: 'POST',
@@ -131,7 +269,7 @@ start_time = time.time()
 all_items = []
 for p in range(1, pages + 1):
     print(f"{p}페이지 크롤링 중... ({p}/{pages})")
-    page_data = driver.execute_script(fetch_page_script(p, actual_page_size))
+    page_data = driver.execute_script(fetch_page_script(p, actual_page_size, sido, sidoCode, type))
     page_list = page_data['list']
 
     # 중복 키 정리
@@ -145,7 +283,7 @@ for p in range(1, pages + 1):
         # print({name},vlt_year)
         if ykiho:
             # print(f"  상세 데이터 크롤링 중... (페이지 {p} 아이템 {idx}/{len(cleaned_page_items)}) ykiho={ykiho}")
-            detail_raw = driver.execute_script(fetch_detail_script(ykiho, vlt_year))
+            detail_raw = driver.execute_script(fetch_detail_script(ykiho, vlt_year, sido, sidoCode, type))
             
             try:
                 detail_data= json.loads(detail_raw)
@@ -182,7 +320,7 @@ with open('nhis_all_list_with_detail.json', 'r', encoding='utf-8') as f:
 df = pd.json_normalize(data)
 
 # 3️⃣ 엑셀로 저장
-df.to_excel('nhis_all_list_with_detail.xlsx', index=False)
+df.to_excel(f'nhis_all_list_with_detail_{sido}_{type_nm}.xlsx', index=False)
 
 print(f"총 수집된 항목 수: {len(all_items)} (서버가 알려준 총 건수: {total})")
 print("상세 데이터 포함한 리스트를 'nhis_all_list_with_detail.xlsx' 파일에 저장했습니다.")
