@@ -9,3 +9,4 @@ __pycache__/
 
 # 크롤링 결과 json 파일 무시
 nhis_*.json
+nhis_*.xlsx

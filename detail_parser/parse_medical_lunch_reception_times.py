@@ -31,15 +31,15 @@ def parse_medical_lunch_reception_times(soup):
         return (title, extra, data) if data else None
 
     # 진료시간
-    # med_parsed = parse_table_with_extra_info(headers[0].get_text(strip=True), tables[0])
-    # if med_parsed:
-    #     med_title, med_extra, med_data = med_parsed
-    #     result[med_title] = {"등록일": med_extra, "내용": med_data}
+    med_parsed = parse_table_with_extra_info(headers[0].get_text(strip=True), tables[0])
+    if med_parsed:
+        med_title, med_extra, med_data = med_parsed
+        result[med_title] = {"등록일": med_extra, "내용": med_data}
     # 점심시간
-    lunch_parsed = parse_table_with_extra_info(headers[1].get_text(strip=True), tables[1])
-    if lunch_parsed:
-        lunch_title, lunch_extra, lunch_data = lunch_parsed
-        result[lunch_title] = {"등록일": lunch_extra, "내용": lunch_data}
+    # lunch_parsed = parse_table_with_extra_info(headers[1].get_text(strip=True), tables[1])
+    # if lunch_parsed:
+    #     lunch_title, lunch_extra, lunch_data = lunch_parsed
+    #     result[lunch_title] = {"등록일": lunch_extra, "내용": lunch_data}
     # 접수시간
     # reception_parsed = parse_table_with_extra_info(headers[2].get_text(strip=True), tables[2])
     # if reception_parsed:

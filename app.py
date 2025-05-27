@@ -5,6 +5,7 @@ import json
 import math
 import time
 from detail_parser.detail_parser import parse_detail_html
+import pandas as pd
 
 # 1️⃣ 드라이버 세팅
 options = webdriver.ChromeOptions()
@@ -104,14 +105,14 @@ def clean_duplicate_keys(item):
     lower_keys_item = {k.lower(): v for k, v in item.items()}
 
     cleaned = {
-        'hpkiho': lower_keys_item.get('hpkiho') or lower_keys_item.get('hp_kiho'),
+        '검진기관_식별코드': lower_keys_item.get('hpkiho') or lower_keys_item.get('hp_kiho'),
         '검진기관명': lower_keys_item.get('hpname') or lower_keys_item.get('hp_name'),
         '검진기관_전화번호': lower_keys_item.get('hptelno') or lower_keys_item.get('hp_telno'),
         '검진기관_주소': lower_keys_item.get('hpaddr') or lower_keys_item.get('hp_addr'),
         '검진기관_영업일': lower_keys_item.get('type_day') or lower_keys_item.get('type_day'.upper()),
         '검진기관_우수항목': lower_keys_item.get('type_hspt') or lower_keys_item.get('type_hspt'.upper()),
         '검진기관_항목': lower_keys_item.get('type_list') or lower_keys_item.get('type_list'.upper()),
-        'vlt_yyyy' : lower_keys_item.get('vlt_yyyy') or lower_keys_item.get('vlt_yyyy'.upper())
+        '검진기관_평가연도' : lower_keys_item.get('vlt_yyyy') or lower_keys_item.get('vlt_yyyy'.upper())
     }
     return {k: v for k, v in cleaned.items() if v is not None}
 
@@ -138,8 +139,8 @@ for p in range(1, pages + 1):
 
     # 상세 데이터 추가 크롤링
     for idx, item in enumerate(cleaned_page_items, start=1):
-        ykiho = item.get('hpkiho')
-        vlt_year = item.get('vlt_yyyy')
+        ykiho = item.get('검진기관_식별코드')
+        vlt_year = item.get('검진기관_평가연도')
         name = item.get('검진기관명')
         # print({name},vlt_year)
         if ykiho:
@@ -152,10 +153,10 @@ for p in range(1, pages + 1):
                 # JSON 파싱 실패 시 detail_parser 모듈로 HTML 파싱
                 detail_data = parse_detail_html(detail_raw)
             
-            item['detail'] = detail_data
+            item['상세정보'] = detail_data
             time.sleep(0.3)
         else:
-            print(f"  ykiho 없음, 상세 데이터 생략 (페이지 {p} 아이템 {idx})")
+            print(f" 식별코드 없음, 상세 데이터 생략 (페이지 {p} 아이템 {idx})")
     # 테스트용 나중에 지우기
     # if p==5:
     #     break
@@ -173,7 +174,17 @@ for p in range(1, pages + 1):
 with open('nhis_all_list_with_detail.json', 'w', encoding='utf-8') as f:
     json.dump(all_items, f, ensure_ascii=False, indent=2)
 
+# JSON 다시 읽기 (선택 사항, 방금 저장한 파일을 읽어서 DataFrame으로 변환)
+with open('nhis_all_list_with_detail.json', 'r', encoding='utf-8') as f:
+    data = json.load(f)
+
+# JSON 데이터를 pandas DataFrame으로 변환 (복잡한 중첩 데이터도 안전하게 처리)
+df = pd.json_normalize(data)
+
+# 3️⃣ 엑셀로 저장
+df.to_excel('nhis_all_list_with_detail.xlsx', index=False)
+
 print(f"총 수집된 항목 수: {len(all_items)} (서버가 알려준 총 건수: {total})")
-print("상세 데이터 포함한 리스트를 'nhis_all_list_with_detail.json' 파일에 저장했습니다.")
+print("상세 데이터 포함한 리스트를 'nhis_all_list_with_detail.xlsx' 파일에 저장했습니다.")
 
 driver.quit()
