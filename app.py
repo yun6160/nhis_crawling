@@ -25,7 +25,22 @@ while True:
     print("조회할 지역을 선택하세요:")
     print("1. 서울특별시")
     print("2. 경기도")
-    choice = input("번호 입력 (1 또는 2): ").strip()
+    print("3. 부산광역시")
+    print("4. 대구광역시")
+    print("5. 인천광역시")
+    print("6. 광주광역시")
+    print("7. 대전광역시")
+    print("8. 울산광역시")
+    print("9. 세종특별자치시")
+    print("10. 충청북도")
+    print("11. 충청남도")
+    print("12. 전라남도")
+    print("13. 경상북도")
+    print("14. 경상남도")
+    print("15. 제주특별자치도")
+    print("16. 강원특별자치도")
+    print("17. 전북특별자치도")
+    choice = input("번호 입력 : ").strip()
     if choice == '1':
         sido = '서울특별시'
         sidoCode = '11'
@@ -34,8 +49,68 @@ while True:
         sido = '경기도'
         sidoCode = '41'
         break
+    elif choice == '3':
+        sido = '부산광역시'
+        sidoCode = '26'
+        break
+    elif choice == '4':
+        sido = '대구광역시'
+        sidoCode = '27'
+        break
+    elif choice == '5':
+        sido = '인천광역시'
+        sidoCode = '28'
+        break
+    elif choice == '6':
+        sido = '광주광역시'
+        sidoCode = '29'
+        break
+    elif choice == '7':
+        sido = '대전광역시'
+        sidoCode = '30'
+        break
+    elif choice == '8':
+        sido = '울산광역시'
+        sidoCode = '31'
+        break
+    elif choice == '9':
+        sido = '세종특별자치시'
+        sidoCode = '36'
+        break
+    elif choice == '10':
+        sido = '충청북도'
+        sidoCode = '43'
+        break
+    elif choice == '11':
+        sido = '충청남도'
+        sidoCode = '44'
+        break
+    elif choice == '12':
+        sido = '전라남도'
+        sidoCode = '46'
+        break
+    elif choice == '13':
+        sido = '경상북도'
+        sidoCode = '47'
+        break
+    elif choice == '14':
+        sido = '경상남도'
+        sidoCode = '48'
+        break
+    elif choice == '15':
+        sido = '제주특별자치도'
+        sidoCode = '50'
+        break
+    elif choice == '16':
+        sido = '강원특별자치도'
+        sidoCode = '51'
+        break
+    elif choice == '17':
+        sido = '전북특별자치도'
+        sidoCode = '52'
+        break
     else:
-        print("1 또는 2만 입력해 주세요.")
+        print("유효한 숫자만 입력해주세요.")
 
 while True:
     print("검진 유형을 선택하세요:")
@@ -69,12 +144,12 @@ while True:
         break
     elif choice == '6':
         while True:
-            print("1. 위암")    # searchExamOrgType9_1
-            print("2. 대장암")  # searchExamOrgType9_2
-            print("3. 자궁경부암")# searchExamOrgType9_3
-            print("4. 유방암")  # searchExamOrgType9_4
-            print("5. 간암")    # searchExamOrgType9_5
-            print("6. 폐암")    # searchExamOrgType9_6
+            print("1. 위암")        # searchExamOrgType9_1
+            print("2. 대장암")      # searchExamOrgType9_2
+            print("3. 자궁경부암")  # searchExamOrgType9_3
+            print("4. 유방암")      # searchExamOrgType9_4
+            print("5. 간암")        # searchExamOrgType9_5
+            print("6. 폐암")        # searchExamOrgType9_6
             choice = input("번호 입력 (1 ~ 6): ").strip()
             if choice == '1':
                 type = '9_1'
