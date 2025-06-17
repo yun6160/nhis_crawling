@@ -33,3 +33,11 @@ pip install -r requirements.txt
 ```bash
 python app.py
 ```
+
+```
+nhis_crawling/
+├── app.py                # Streamlit 앱
+├── crawler.py            # 크롤러 비동기 클래스
+├── detail_parser/        # HTML fallback 파서
+├── utils/                # 유틸리티
+```
