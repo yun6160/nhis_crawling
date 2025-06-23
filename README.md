@@ -31,7 +31,7 @@ pip install -r requirements.txt
 ## 3. 실행 방법
 
 ```bash
-python app.py
+streamlit run app.py
 ```
 
 ```
